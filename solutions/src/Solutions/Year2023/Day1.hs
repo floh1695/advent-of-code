@@ -13,4 +13,7 @@ doProblem1 = do
 problem1 :: String -> Int
 problem1 input = solution
   where
-    solution = 0
+    inputs   = lines input
+    digits   = map (filter Char.isDigit) inputs
+    numbers  = map (\x -> read [head x, last x]) digits
+    solution = sum numbers
