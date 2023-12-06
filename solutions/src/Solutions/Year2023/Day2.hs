@@ -19,7 +19,8 @@ problem1 input = solution
 problem2 :: String -> Int
 problem2 input = solution
   where
-    solution = 0
+    games    = parseGames input
+    solution = sum $ map (handProduct . minimumHandForGame) games
 
 data Game = Game
   { identifier :: Int
@@ -47,6 +48,9 @@ parseGames input = map parseGame $ lines input
 testGame :: Hand -> Game -> Bool
 testGame test game = all (testHand test) $ hands game
 
+minimumHandForGame :: Game -> Hand
+minimumHandForGame game = foldl greatestHand emptyHand $ hands game
+
 data Hand = Hand
   { red   :: Int
   , green :: Int
@@ -60,6 +64,9 @@ newHand red' green' blue' = Hand
   , green = green'
   , blue  = blue'
   }
+
+emptyHand :: Hand
+emptyHand = newHand 0 0 0
 
 parseHand :: String -> Hand
 parseHand input = newHand red' green' blue'
@@ -75,6 +82,16 @@ handCount hand = sum $ map ($ hand) [red, green, blue]
 
 testHand :: Hand -> Hand -> Bool
 testHand test hand = all (\f -> f test >= f hand) [handCount, red, green, blue]
+
+greatestHand :: Hand -> Hand -> Hand
+greatestHand left right = newHand red' green' blue'
+  where
+    red'   = red left `max` red right
+    green' = green left `max` green right
+    blue'  = blue left `max` blue right
+
+handProduct :: Hand -> Int
+handProduct hand = product $ map ($ hand) [red, green, blue]
 
 data Cubes = Cubes
   { color :: String
