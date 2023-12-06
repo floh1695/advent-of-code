@@ -25,6 +25,7 @@ source-repository head
 library
   exposed-modules:
       Solutions.Year2023.Day1
+      Solutions.Year2023.Day2
   other-modules:
       Paths_solutions
   autogen-modules:
